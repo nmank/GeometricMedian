@@ -51,7 +51,7 @@ y(:,ii) = Y;
 er = calc_error(x,Y,p,opt_type);
 err(ii) = er;
 weights = [];
-tY = ones(3,1)
+tY = ones(3,1);
 while norm(tY) >= epsilon
 
     %Compute tangents

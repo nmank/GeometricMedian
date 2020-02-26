@@ -1,5 +1,5 @@
 %data parameters
-num_points = 11;
+num_points = 4;
 circ = true; %placed on the origin
 angle = acos(1/sqrt(3));
 %angle = 2*pi/9; %angle for the circle from the origin in the direction of the z axis
