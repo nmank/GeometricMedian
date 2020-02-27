@@ -76,7 +76,15 @@ scatter3(sp_pts(1,:),sp_pts(2,:),sp_pts(3,:),ones(num_it+1,1)*10,exp(-err1),'fil
 hold on
 %data
 scatter3(data(1,:),data(2,:),data(3,:)+.02,ones(num_points,1)*50,'k','filled')
-
+%for emily with 7 points
+% for i=1:num_points
+%     if i==1 || i==4 || i==5 || i==7
+%         clr = 'r';
+%     else
+%         clr = 'k';
+%     end
+%     scatter3(data(1,i),data(2,i),data(3,i)+.02,50,clr,'filled')
+% end
 
 %chordal (plotted as o)
 %sln
