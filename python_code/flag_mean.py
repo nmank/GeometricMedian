@@ -12,6 +12,7 @@ Forgot how python slicing works, finally remembered - 1/7
 
 def flag_mean(X, r='default'):
     # X a list of subspaces, r desired dimension
+    print(X)
     m = len(X)
     if r == 'default':
         r = X[0].shape[1]

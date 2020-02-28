@@ -1,5 +1,6 @@
 import numpy as np
 import flag_mean
+import flag_median
 import random
 import distances
 import plots
@@ -92,12 +93,15 @@ class gr_lbg:
         self.label_change = []
         self.verbosity = verbosity
 
-    def fit(self, data, true_labels=None, supervised=False, show_cluster_data=True, center_count=1,
+    def fit(self, data, true_labels=None, supervised=False, show_cluster_data=False, center_count=1,
             plot_results=False, eigplot=True, distortion_plot=True, numits=10):
 
         if not supervised:
             if self.center_select == 'data':
-                centers = random.sample(data, center_count)
+                centers = []
+                for i in np.random.choice(len(data),center_count):
+                     centers.append(data[i])
+                #centers = np.random.sample(data, center_count)
             elif self.center_select == 'random':
                 centers = []
                 for i in range(center_count):
@@ -121,7 +125,8 @@ class gr_lbg:
                     cluster_subset = []
                     for q in range(len(idx)):
                         cluster_subset.append(data[idx[q]])
-                    centers.append(flag_mean.flag_median(cluster_subset)) #nate's change
+                    centers.append(flag_median.flag_median(cluster_subset,.00001)) #medians
+                    #centers.append(flag_mean.flag_mean(cluster_subset)) #means
                 count += 1
                 self.center_updates.append([centers])
                 dist = distances.chordal_distance(centers, data)
@@ -141,6 +146,7 @@ class gr_lbg:
         if plot_results:
             embed_plot_results(data, centers, labels, eigplot=eigplot)
         if show_cluster_data:
+            #you need to devine true labels before using this
             print_cluster_data(centers, labels, true_labels)
 
         if distortion_plot:

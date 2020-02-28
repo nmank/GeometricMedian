@@ -26,11 +26,12 @@ def chordal_distance(X, Y):
     # X, Y are lists of array representations of subspaces
     m = len(X)
     n = len(Y)
+    [r,k] = X[0].shape
     distance = np.zeros((m, n))
     for i in range(m):
         for j in range(n):
             costheta = np.linalg.svd(np.dot(X[i].T, Y[j]))[1]
-            sinsquares = 1 - costheta**2
+            sinsquares = np.sqrt(1 - costheta**2) #nate changed this
             distance[i, j] = np.sum(sinsquares)
     distance[distance < 10e-12] = 0
     return distance

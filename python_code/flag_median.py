@@ -29,7 +29,7 @@ def flag_median(X, eps, init = 'random', r='default'):
 	aX = []
 	err = []
 	for j in range(m):
-		alph[j,i] = (r-trace(np.dot(np.dot(Y.transpose(),X[j]),np.dot(X[j].transpose(),Y))))**(-1/4)
+		alph[j,i] = (r-np.trace(np.dot(np.dot(Y.transpose(),X[j]),np.dot(X[j].transpose(),Y))))**(-1/4)
 		aX[j] = alph[j,i]*X[j]
 	Y0 = Y1
 	Y1 = flag_mean.flag_mean(aX,r)
@@ -39,7 +39,7 @@ def flag_median(X, eps, init = 'random', r='default'):
 	while cauch > eps:
 		aX = []
 		for j in range(m):
-			alph[j,i] = (r-trace(np.dot(np.dot(Y.transpose(),X[j]),np.dot(X[j].transpose(),Y))))**(-1/4)
+			alph[j,i] = (r-np.trace(np.dot(np.dot(Y.transpose(),X[j]),np.dot(X[j].transpose(),Y))))**(-1/4)
 			aX[j] = alph[j,i]*X[j]
 		Y0 = Y1
 		Y1 = flag_mean.flag_mean(X,r)
