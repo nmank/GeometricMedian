@@ -42,16 +42,16 @@ def cluster_distortion(dist, labels, center_count):
     return np.mean(cluster_dist)
 
 
-def embed_plot_results(data, centers, true_labels, eigplot=False):
+def embed_plot_results(data, centers, true_labels, eigplot = False, mdn = False):
     l = len(data)
     plot_data = data + centers
-    pairwise_dist = distances.chordal_distance(plot_data, plot_data)
+    pairwise_dist = distances.chordal_distance(plot_data, plot_data, mdn)
     embed_coords = distances.mds(pairwise_dist, eigplot=eigplot)
     plt.figure()
     for i in np.unique(true_labels):
         idx = np.where(true_labels == i)[0]
         plt.plot(embed_coords[idx, 0], embed_coords[idx, 1], 'o', label='Cluster %i' % i)
-        plt.plot(embed_coords[l+i, 0], embed_coords[l+i, 1], 'o', markeredgecolor='k',
+        plt.plot(embed_coords[l+i-1, 0], embed_coords[l+i-1, 1], 'o', markeredgecolor='k',
                  markersize=8, label='Center %i' % i)
     plt.legend()
     plt.title('Grassmann LBG Results')
@@ -94,7 +94,7 @@ class gr_lbg:
         self.verbosity = verbosity
 
     def fit(self, data, true_labels=None, supervised=False, show_cluster_data=False, center_count=1,
-            plot_results=False, eigplot=True, distortion_plot=True, numits=10):
+            plot_results=False, eigplot=True, distortion_plot=True, numits=10, median = True):
 
         if not supervised:
             if self.center_select == 'data':
@@ -111,7 +111,7 @@ class gr_lbg:
                 return
             count = 0
             self.center_updates.append([centers])
-            dist = distances.chordal_distance(centers, data)
+            dist = distances.chordal_distance(centers, data, median)
             labels = np.argmin(dist, axis=0)  # should be MIN in each column
             self.label_change.append([labels])
             avg_dist = cluster_distortion(dist, labels, center_count)
@@ -125,11 +125,13 @@ class gr_lbg:
                     cluster_subset = []
                     for q in range(len(idx)):
                         cluster_subset.append(data[idx[q]])
-                    centers.append(flag_median.flag_median(cluster_subset,.00001)) #medians
-                    #centers.append(flag_mean.flag_mean(cluster_subset)) #means
+                    if median == True:
+                        centers.append(flag_median.flag_median(cluster_subset,.00001)) #medians
+                    else:
+                        centers.append(flag_mean.flag_mean(cluster_subset)) #means
                 count += 1
                 self.center_updates.append([centers])
-                dist = distances.chordal_distance(centers, data)
+                dist = distances.chordal_distance(centers, data, median)
                 labels = np.argmin(dist, axis=0)  # should be min in each column
                 self.label_change.append([labels])
                 avg_dist = cluster_distortion(dist, labels, center_count)

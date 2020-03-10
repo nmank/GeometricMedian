@@ -22,18 +22,31 @@ def geodesic(C, X, t):
     return Q
 
 
-def chordal_distance(X, Y):
+def chordal_distance(X, Y, mdn):
     # X, Y are lists of array representations of subspaces
-    m = len(X)
-    n = len(Y)
-    [r,k] = X[0].shape
-    distance = np.zeros((m, n))
-    for i in range(m):
-        for j in range(n):
-            costheta = np.linalg.svd(np.dot(X[i].T, Y[j]))[1]
-            sinsquares = np.sqrt(1 - costheta**2) #nate changed this
-            distance[i, j] = np.sum(sinsquares)
-    distance[distance < 10e-12] = 0
+    
+    #nate changed this
+    if type(X) != list and type(Y) != list:
+        costheta = np.linalg.svd(np.dot(X.T, Y))[1]
+        sinsquares = np.sqrt(1 - costheta**2) 
+        distance = np.sum(sinsquares)
+        if distance < 10e-12:
+            distace = 0
+
+    else:
+        m = len(X)
+        n = len(Y)
+        distance = np.zeros((m, n))
+        for i in range(m):
+            for j in range(n):
+                costheta = np.linalg.svd(np.dot(X[i].T, Y[j]))[1]
+                sinsquares = 1 - costheta**2
+                #nate changed the next three lines
+                sinsquares = [0 if a_ < 0 else a_ for a_ in sinsquares]
+                if mdn == True:
+                    sins = np.sqrt(sinsquares)
+                distance[i, j] = np.sum(sins)
+        distance[distance < 10e-12] = 0
     return distance
 
 

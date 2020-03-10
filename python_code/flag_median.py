@@ -28,24 +28,28 @@ def flag_median(X, eps, init = 'random', r='default'):
 	alph = []
 	aX = []
 	err = []
+	al = []
 	for j in range(m):
-		alph[j,i] = (r-np.trace(np.dot(np.dot(Y.transpose(),X[j]),np.dot(X[j].transpose(),Y))))**(-1/4)
-		aX[j] = alph[j,i]*X[j]
-	Y0 = Y1
+		al.append((r-np.trace(np.dot(np.dot(Y0.transpose(),X[j]),np.dot(X[j].transpose(),Y0))))**(-1/4))
+		aX.append(al[j]*X[j])
+	alph.append(al)
 	Y1 = flag_mean.flag_mean(aX,r)
-	err[i] = distances.chordal_distance(Y0,Y1)
+	err.append(distances.chordal_distance(Y0,Y1))
+	i += 1
 	cauch = 1
 
 	while cauch > eps:
 		aX = []
+		al = []
 		for j in range(m):
-			alph[j,i] = (r-np.trace(np.dot(np.dot(Y.transpose(),X[j]),np.dot(X[j].transpose(),Y))))**(-1/4)
-			aX[j] = alph[j,i]*X[j]
+			al.append((r-np.trace(np.dot(np.dot(Y1.transpose(),X[j]),np.dot(X[j].transpose(),Y1))))**(-1/4))
+			aX.append(al[j]*X[j])
+		alph.append(al)
 		Y0 = Y1
-		Y1 = flag_mean.flag_mean(X,r)
-		i += 1
-		err[i] = distances.chordal_distance(Y0,Y1)
+		Y1 = flag_mean.flag_mean(aX,r)
+		err.append(distances.chordal_distance(Y0,Y1))
 		cauch = err[i-1]-err[i]
+		i += 1
 
 	if cauch < 0:
 		Y1 = Y0
