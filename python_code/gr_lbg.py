@@ -48,11 +48,12 @@ def embed_plot_results(data, centers, true_labels, eigplot = False, mdn = False)
     pairwise_dist = distances.chordal_distance(plot_data, plot_data, mdn)
     embed_coords = distances.mds(pairwise_dist, eigplot=eigplot)
     plt.figure()
+    ii=0
     for i in np.unique(true_labels):
         idx = np.where(true_labels == i)[0]
         plt.plot(embed_coords[idx, 0], embed_coords[idx, 1], 'o', label='Cluster %i' % i)
-        plt.plot(embed_coords[l+i-1, 0], embed_coords[l+i-1, 1], 'o', markeredgecolor='k',
-                 markersize=8, label='Center %i' % i)
+        plt.plot(embed_coords[l+ii, 0], embed_coords[l+ii, 1], 'o', markeredgecolor='k', markersize=8, label='Center %i' % ii)
+        ii += 1
     plt.legend()
     plt.title('Grassmann LBG Results')
     plt.show()

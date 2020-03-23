@@ -38,11 +38,14 @@ hold on
 
 for ii=1:num_samples
     %randomize the N+1st point
-    theta = pi*rand()/4;
-    phi = 2*pi*normrnd(0,.2);
-    data(1,num_points) = sin(theta)*cos(phi);
-    data(2,num_points) = sin(theta)*sin(phi);
-    data(3,num_points) = cos(theta);
+%     theta = pi*rand()/4;
+%     phi = 2*pi*normrnd(0,.2);
+%     data(1,num_points) = sin(theta)*cos(phi);
+%     data(2,num_points) = sin(theta)*sin(phi);
+%     data(3,num_points) = cos(theta);
+    x = rand(3,1);
+    data(:,num_points) = x/norm(x);
+    
 
 
     %compute the sln to opt problem via flag
