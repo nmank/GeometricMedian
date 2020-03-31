@@ -107,6 +107,11 @@ class gr_lbg:
                 centers = []
                 for i in range(center_count):
                     centers.append(np.linalg.qr(np.random.rand(data.shape))[0])
+            elif self.center_select == 'troubleshoot':
+                centers = []
+                centers.append(data[0])
+                centers.append(data[1])
+                centers.append(data[2])
             else:
                 print("Invalid center selection option. Please choose 'data' or 'random'")
                 return

@@ -1,11 +1,11 @@
 %data parameters
-num_points = 4;
-circ = true; %placed on the origin
-angle = acos(1/sqrt(3));
+num_points = 3;
+circ = false; %placed on the origin
+angle = false;
 %angle = 2*pi/9; %angle for the circle from the origin in the direction of the z axis
 reg = true; %regular spacing
 frame = 1; %set this to 6 for point frame data
-num_samples = 1000
+num_samples = 5000
 
 %choose the distance in the optimization problem
 %chord = chordal
@@ -25,9 +25,8 @@ theta = pi*rand(N,1)/4;
 phi = 2*pi*normrnd(0,.2,[N]);
 data = zeros(3,num_points);
 for i=1:N
-    data(1,i) = sin(theta(i))*cos(phi(i));
-    data(2,i) = sin(theta(i))*sin(phi(i));
-    data(3,i) = cos(theta(i));
+    x = normrnd(0,1,3,1);
+    data(:,i) = x/norm(x);
 end
 
 
@@ -43,7 +42,7 @@ for ii=1:num_samples
 %     data(1,num_points) = sin(theta)*cos(phi);
 %     data(2,num_points) = sin(theta)*sin(phi);
 %     data(3,num_points) = cos(theta);
-    x = rand(3,1);
+    x = normrnd(0,1,3,1);
     data(:,num_points) = x/norm(x);
     
 

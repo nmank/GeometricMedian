@@ -24,11 +24,14 @@ for d in digits:
 lbg_test_obj = gr_lbg.gr_lbg()
 #lbg_test_obj.center_select = 'random'
 
+lbg_test_obj.center_select = 'troubleshoot'
+
 [centers,labels_after] = lbg_test_obj.fit(data,center_count = 3, median = do_median)
+
 
 gr_lbg.print_cluster_data(centers, labels_after, labels_before)
 gr_lbg.embed_plot_results(data,centers,labels_before, mdn = do_median) 
 
-plt.imshow(np.reshape(centers[0][:,0],(28,28))) 
-plt.imshow(np.reshape(centers[1][:,0],(28,28))) 
-plt.imshow(np.reshape(centers[2][:,0],(28,28))) 
+# plt.imshow(np.reshape(centers[0][:,0],(28,28))) 
+# plt.imshow(np.reshape(centers[1][:,0],(28,28))) 
+# plt.imshow(np.reshape(centers[2][:,0],(28,28))) 
