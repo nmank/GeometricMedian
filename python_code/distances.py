@@ -45,7 +45,9 @@ def chordal_distance(X, Y, mdn):
                 sinsquares = [0 if a_ < 0 else a_ for a_ in sinsquares]
                 if mdn == True:
                     sins = np.sqrt(sinsquares)
-                distance[i, j] = np.sum(sins)
+                    distance[i, j] = np.sum(sins)
+                else:
+                    distance[i, j] = np.sum(sinsquares)
         distance[distance < 10e-12] = 0
     return distance
 
