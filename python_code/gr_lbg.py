@@ -95,7 +95,7 @@ class gr_lbg:
         self.verbosity = verbosity
 
     def fit(self, data, true_labels=None, supervised=False, show_cluster_data=False, center_count=1,
-            plot_results=False, eigplot=True, distortion_plot=True, numits=10, median = True):
+            plot_results=False, eigplot=True, distortion_plot=True, numits=10, median = True, l_vec_dims = 5, plot_svals = False):
 
         if not supervised:
             if self.center_select == 'data':
@@ -106,7 +106,7 @@ class gr_lbg:
             elif self.center_select == 'random':
                 centers = []
                 for i in range(center_count):
-                    centers.append(np.linalg.qr(np.random.rand(data.shape))[0])
+                    centers.append(np.linalg.qr(np.random.rand(data[0].shape[0],l_vec_dims))[0])
             elif self.center_select == 'troubleshoot':
                 centers = []
                 centers.append(data[0])
@@ -131,10 +131,13 @@ class gr_lbg:
                     cluster_subset = []
                     for q in range(len(idx)):
                         cluster_subset.append(data[idx[q]])
-                    if median == True:
-                        centers.append(flag_median.flag_median(cluster_subset,.00001)) #medians
+                    if len(cluster_subset) == 1:
+                        centers.append(cluster_subset)
                     else:
-                        centers.append(flag_mean.flag_mean(cluster_subset)) #means
+                        if median == True:
+                            centers.append(flag_median.flag_median(cluster_subset,.00001,r=l_vec_dims)) #medians
+                        else:
+                            centers.append(flag_mean.flag_mean(cluster_subset,r=l_vec_dims)) #means
                 count += 1
                 self.center_updates.append([centers])
                 dist = distances.chordal_distance(centers, data, median)
@@ -147,6 +150,21 @@ class gr_lbg:
                 self.distortion_change.append(avg_dist)
             # Calculate final post-iteration stuff
             print('LBG terminated after %i iterations \n' % count)
+            #plot singular values
+            #fix this for more complex examples
+            if plot_svals:
+                S = []
+                fig, axs = plt.subplots(1, 3)
+                for i in range(center_count):
+                    idx = (labels == i).nonzero()[0]
+                    cluster_subset = []
+                    for q in range(len(idx)):
+                        cluster_subset.append(data[idx[q]])
+                    if median == True:
+                        S.append(flag_median.flag_median(cluster_subset,.00001, r=l_vec_dims, s_vals = True)) #medians
+                    else:
+                        S.append(flag_mean.flag_mean(cluster_subset,r=l_vec_dims, s_vals = True))
+                
 
         else:
             pass  # gotta add supervised version later
@@ -164,7 +182,10 @@ class gr_lbg:
             plt.ylabel('Average distortion')
             plt.title('Distortion Change')
 
-        return centers, labels
+        if plot_svals:
+            return centers, labels, S
+        else:
+            return centers, labels
 
     def predict(self, test_data):
         pass

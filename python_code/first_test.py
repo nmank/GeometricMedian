@@ -26,7 +26,8 @@ lbg_test_obj = gr_lbg.gr_lbg()
 
 lbg_test_obj.center_select = 'troubleshoot'
 
-[centers,labels_after] = lbg_test_obj.fit(data,center_count = 3, median = do_median)
+#last param is the number of left singular vectors that we want.
+[centers,labels_after] = lbg_test_obj.fit(data,center_count = 3, median = do_median, l_vec_dims = 5)
 
 
 gr_lbg.print_cluster_data(centers, labels_after, labels_before)

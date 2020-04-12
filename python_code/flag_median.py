@@ -8,8 +8,12 @@ import distances #
 '''
 
 
-def flag_median(X, eps, init = 'random', r='default'):
+def flag_median(X, eps, init = 'random', r='default', s_vals = False):
     #nate changed this
+    
+    if type(X) != list:
+        return X
+    
     medn = True 
     # X a list of subspaces, r desired dimension
     m = len(X)
@@ -19,12 +23,12 @@ def flag_median(X, eps, init = 'random', r='default'):
     #initialize median
     if init == 'random':
         #randomly
-        n =X[0].shape[0]
+        n = X[0].shape[0]
         Y_raw = np.random.rand(n,r)
-        Y0 = np.linalg.qr(Y_raw)[0]		
+        Y0 = np.linalg.qr(Y_raw)[0]
     else:
         #flag mean
-        Y0 = flag_mean.flag_mean(X,r)	
+        Y0 = flag_mean.flag_mean(X,r)
 
     i=0
     alph = []
@@ -57,6 +61,10 @@ def flag_median(X, eps, init = 'random', r='default'):
         Y1 = Y0
         print('Last iteration of flag meadian increased error!')
 
-    return Y1
+    if s_vals:
+        S = flag_mean.flag_mean(aX,r,s_vals)
+        return S
+    else:
+        return Y1
 
 

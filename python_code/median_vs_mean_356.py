@@ -2,9 +2,13 @@ import numpy as np
 import gr_lbg
 import load_mnist_data
 import matplotlib.pyplot as plt
+from sklearn import metrics
 
+def cluster_purity(labels,true_labels):
+    contingency_matrix = metrics.cluster.contingency_matrix(true_labels, labels)
+    return np.sum(np.amax(contingency_matrix, axis=0)) / np.sum(contingency_matrix) 
 
-def run_grlbg(do_median, k = 5, ss_big = 200, digits = [3,5,6], st = 'train'):
+def run_grlbg(do_median, k = 5, ss_big = 500, digits = [3,5,6], st = 'train', Ldims = 5,psval = False):
         data = []
         labels_before = []
         for d in digits:
@@ -13,39 +17,64 @@ def run_grlbg(do_median, k = 5, ss_big = 200, digits = [3,5,6], st = 'train'):
                         data.append(np.linalg.qr(dta[:,i*k:(i+1)*(k)])[0])
                         labels_before.append(lbl[0])
 
-
         lbg_test_obj = gr_lbg.gr_lbg()
 
         #center initialization
         #lbg_test_obj.center_select = 'random'
         lbg_test_obj.center_select = 'troubleshoot' #initialize with properly labeled data points
 
-        [centers,labels_after] = lbg_test_obj.fit(data,center_count = 3, median = do_median)
+        #last param is the number of left singular vectors that we want.
+        if psval:
+            [centers,labels_after,S] = lbg_test_obj.fit(data,center_count = 3, median = do_median, l_vec_dims = Ldims, plot_svals = psval)
+            print('Cluster Purity: ')
+            print(cluster_purity(labels_after,labels_before))
+            return centers, S
+        else:
+            [centers,labels_after] = lbg_test_obj.fit(data,center_count = 3, median = do_median, l_vec_dims = Ldims, plot_svals = psval)
+            print(cluster_purity(labels_after,labels_before))
+            print('Cluster Purity: ')
+            
+            return centers
 
 
         # plot distortion change and confusion matrix and mds plot
         # gr_lbg.print_cluster_data(centers, labels_after, labels_before)
         # gr_lbg.embed_plot_results(data,centers,labels_before, mdn = do_median) 
 
-        return centers
+        
 
 
-ss_big = 200
+ss_big = 500
 #gr(k,n), k<n and k must divide ss_big
 k=5
 #digits =[0,1,2,3,4,5,6,7,8,9]
 digits =[3,5,6]
 st = 'train'
-
-centers_median = run_grlbg(True)
-centers_mean = run_grlbg(False)
+out_k = 5
 
 
+
+#return singular values
+[centers_median,S_median] = run_grlbg(True, Ldims = out_k,psval = True)
+[centers_mean,S_mean] = run_grlbg(False, Ldims = out_k,psval = True)
+plt.show()
+#plotting singularvalues
+for kk in range(3):
+        plt.plot(S_median[kk]/np.max(S_median[kk]), 'b')
+        plt.plot(S_mean[kk]/np.max(S_mean[kk]), 'r')
+plt.show()
+
+
+
+#return means
+centers_median = run_grlbg(True, Ldims = out_k)
+centers_mean = run_grlbg(False, Ldims = out_k)
+plt.show()
 #have to tweak around a bit with the plot to line up centers
-fig, axs = plt.subplots(2, k)
-for kk in range(k):
+fig, axs = plt.subplots(2, 5)
+for kk in range(5):
         axs[0, kk].imshow(np.reshape(centers_median[2][:,kk],(28,28)))
-        axs[1, kk].imshow(np.reshape(centers_mean[0][:,kk],(28,28)))
+        axs[1, kk].imshow(np.reshape(centers_mean[2][:,kk],(28,28)))
 
 #label the rows:
 axs[0, 0].set_ylabel('Median')
@@ -60,4 +89,7 @@ for ax in axs:
 fig.tight_layout()
 plt.show()
 
+#distances
+import distances
+distances.chordal_distance(centers_median[1],centers_mean[0],mdn = True) 
 

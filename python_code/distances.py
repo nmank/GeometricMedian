@@ -28,10 +28,12 @@ def chordal_distance(X, Y, mdn):
     #nate changed this
     if type(X) != list and type(Y) != list:
         costheta = np.linalg.svd(np.dot(X.T, Y))[1]
-        sinsquares = np.sqrt(1 - costheta**2) 
+        sinsquares = 1 - costheta**2
         distance = np.sum(sinsquares)
         if distance < 10e-12:
-            distace = 0
+            distance = 0
+        if mdn == True:
+            distance = np.sqrt(distance)    
 
     else:
         m = len(X)
@@ -44,8 +46,7 @@ def chordal_distance(X, Y, mdn):
                 #nate changed the next three lines
                 sinsquares = [0 if a_ < 0 else a_ for a_ in sinsquares]
                 if mdn == True:
-                    sins = np.sqrt(sinsquares)
-                    distance[i, j] = np.sum(sins)
+                    distance[i, j] = np.sqrt(np.sum(sinsquares))
                 else:
                     distance[i, j] = np.sum(sinsquares)
         distance[distance < 10e-12] = 0
