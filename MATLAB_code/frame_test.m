@@ -9,7 +9,7 @@ reg = true; %regular spacing
 %chors = chordal squared
 %geodi = geodesic
 %geods = geodesic squared
-opt_type = 'chord';
+opt_type = 'chors';
 
 epsilon = .000001; %convergence criteria (squared sine of angles between consecutive iterations)
 init = 'rando'; %algorithm initialization (start at flag mean if not 'random')

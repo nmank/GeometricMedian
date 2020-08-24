@@ -26,7 +26,7 @@ def chordal_distance(X, Y, mdn):
     # X, Y are lists of array representations of subspaces
     
     #nate changed this
-    if type(X) != list and type(Y) != list:
+    if type(X) != list or type(Y) != list:
         costheta = np.linalg.svd(np.dot(X.T, Y))[1]
         sinsquares = 1 - costheta**2
         distance = np.sum(sinsquares)
@@ -41,14 +41,18 @@ def chordal_distance(X, Y, mdn):
         distance = np.zeros((m, n))
         for i in range(m):
             for j in range(n):
-                costheta = np.linalg.svd(np.dot(X[i].T, Y[j]))[1]
-                sinsquares = 1 - costheta**2
-                #nate changed the next three lines
-                sinsquares = [0 if a_ < 0 else a_ for a_ in sinsquares]
-                if mdn == True:
-                    distance[i, j] = np.sqrt(np.sum(sinsquares))
+                if type(X[i]) == list:
+                    print(X[i])
+                    distance[i,j] = 0
                 else:
-                    distance[i, j] = np.sum(sinsquares)
+                    costheta = np.linalg.svd(np.dot(X[i].T, Y[j]))[1]
+                    sinsquares = 1 - costheta**2
+                    #nate changed the next three lines
+                    sinsquares = [0 if a_ < 0 else a_ for a_ in sinsquares]
+                    if mdn == True:
+                        distance[i, j] = np.sqrt(np.sum(sinsquares))
+                    else:
+                        distance[i, j] = np.sum(sinsquares)
         distance[distance < 10e-12] = 0
     return distance
 
@@ -68,7 +72,7 @@ def geodesic_distance(X, Y):
     return distance
 
 
-def prin_angle_distance(X, Y):
+def print_angle_distance(X, Y):
     # X, Y are lists of array representations of subspaces
     m = len(X)
     n = len(Y)

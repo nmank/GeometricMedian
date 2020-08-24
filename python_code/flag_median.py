@@ -11,7 +11,7 @@ import distances #
 def flag_median(X, eps, init = 'random', r='default', s_vals = False):
     #nate changed this
     
-    if type(X) != list:
+    if type(X) != list or len(X) == 0:
         return X
     
     medn = True 
@@ -56,6 +56,8 @@ def flag_median(X, eps, init = 'random', r='default', s_vals = False):
         err.append(distances.chordal_distance(Y0,Y1,medn))
         cauch = err[i-1]-err[i]
         i += 1
+
+    print(i)
 
     if cauch < 0:
         Y1 = Y0

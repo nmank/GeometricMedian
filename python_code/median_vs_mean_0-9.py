@@ -76,8 +76,8 @@ plt.show()
 #have to tweak around a bit with the plot to line up centers
 fig, axs = plt.subplots(2, 5)
 for kk in range(5):
-        axs[0, kk].imshow(np.reshape(centers_median[1][:,kk],(28,28)))
-        axs[1, kk].imshow(np.reshape(centers_mean[2][:,kk],(28,28)))
+        axs[0, kk].imshow(np.reshape(centers_median[3][:,kk],(28,28)))
+        axs[1, kk].imshow(np.reshape(centers_mean[1][:,kk],(28,28)))
 
 #label the rows:
 axs[0, 0].set_ylabel('Median')
@@ -91,3 +91,26 @@ for ax in axs:
             
 fig.tight_layout()
 plt.show()
+
+
+###############################
+#mds visualization of centers
+import distances
+
+centers_median = run_grlbg(True, data, labels_before, Ldims = out_k)
+centers_mean = run_grlbg(False, data, labels_before, Ldims = out_k)
+plt.show()
+
+plot_data = centers_median+centers_mean+data
+
+pairwise_dist = distances.chordal_distance(plot_data, plot_data, True)
+embed_coords = distances.mds(pairwise_dist)
+
+for i in np.unique(labels_before):
+        idx = np.where(labels_before == i)[0]
+        plt.plot(embed_coords[idx+20, 0], embed_coords[idx+20, 1], '.', label='Cluster %i' % i)
+plt.plot(embed_coords[0:10,0],embed_coords[0:10,1],'x',color = 'k',label='median')
+plt.plot(embed_coords[10:20,0],embed_coords[10:20,1],'x',color = 'r',label='mean')
+plt.legend()
+plt.show()
+

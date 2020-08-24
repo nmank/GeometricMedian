@@ -172,7 +172,7 @@ class gr_lbg:
         if plot_results:
             embed_plot_results(data, centers, labels, eigplot=eigplot)
         if show_cluster_data:
-            #you need to devine true labels before using this
+            #you need to define true labels before using this
             print_cluster_data(centers, labels, true_labels)
 
         if distortion_plot:

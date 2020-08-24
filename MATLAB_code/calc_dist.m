@@ -7,6 +7,8 @@ function dst = calc_dist(x,y,opt_type)
         dst = acos(abs(x'*y));
     elseif opt_type == 'geods'
         dst = acos(abs(x'*y))^2;
+    elseif isstr(opt_type) == 0
+        dst = real(sin(acos(abs(x'*y)))^2)^opy_type;
     else
         print('UNUSABLE WEIGHT TYPE')
     end

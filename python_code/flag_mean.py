@@ -2,7 +2,7 @@ import numpy as np
 
 def flag_mean(X, r='default', s_vals = False):
     # X a list of subspaces, r desired dimension
-    if type(X) == list or len(X) == 1:
+    if type(X) == list and len(X) > 1:
         m = len(X)
         if r == 'default':
             r = X[0].shape[1]

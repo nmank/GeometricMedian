@@ -58,7 +58,23 @@ out_k = 5
 purity_mean = []
 purity_median = []
 for i in range(100):
-    [med,mean] = run_grlbg(True, data, labels_before, Ldims = out_k,purity=True)
-    purity_median.append(med)
-    purity_mean.append(mean)
+    try:
+        [med,mean] = run_grlbg(True, data, labels_before, Ldims = out_k,purity=True)
+        purity_median.append(med)
+        purity_mean.append(mean)
+    except:
+        print('svd didnt converge... me thinks')
+        continue
+
+print('#############################################')
+print('Results')
+print('number of iterations:'+str(len(purity_median)))
+print('MEDIAN')
+print(np.mean(purity_median))
+print(np.std(purity_median))
+print('MEAN')      
+print(np.mean(purity_mean))
+print(np.std(purity_mean))
+
+
     
