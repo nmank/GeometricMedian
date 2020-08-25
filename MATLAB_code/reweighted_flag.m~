@@ -33,12 +33,11 @@ if isequal(init,'random')
     Y = y/norm(y);
 else
     [Yall,S,V] = svd(X);
-    Y = Yall(:,1:k);
+    %Y = Yall(:,1:k);
     %perturb
     %Y = Yall(:,1:k) + rand();
     Y = Y/norm(Y);
-    disp(Y)
-
+    print(Y)
 end
 init_pt = Y;
     
@@ -76,7 +75,6 @@ while sqrt(k - trace((Y0'*Y)*(Y0'*Y)')) >= epsilon
         break
     end
     y(:,ii) = Y;
-    disp(Y)
 end
 
 

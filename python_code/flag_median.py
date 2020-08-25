@@ -8,17 +8,15 @@ import distances #
 '''
 
 
-def flag_median(X, eps, init = 'random', r='default', s_vals = False):
+def flag_median(X, eps, r, init = 'random',  s_vals = False):
     #nate changed this
-    
+
     if type(X) != list or len(X) == 0:
         return X
     
     medn = True 
     # X a list of subspaces, r desired dimension
     m = len(X)
-    if r == 'default':
-        r = X[0].shape[1]
 
     #initialize median
     if init == 'random':
@@ -40,11 +38,12 @@ def flag_median(X, eps, init = 'random', r='default', s_vals = False):
         aX.append(al[j]*X[j])
     alph.append(al)
     Y1 = flag_mean.flag_mean(aX,r)
+    print(Y1)
     err.append(distances.chordal_distance(Y0,Y1,medn))
     i += 1
-    cauch = 1
+    err.append(1)
 
-    while cauch > eps:
+    while err[i-1] > eps:
         aX = []
         al = []
         for j in range(m):
@@ -53,6 +52,7 @@ def flag_median(X, eps, init = 'random', r='default', s_vals = False):
         alph.append(al)
         Y0 = Y1
         Y1 = flag_mean.flag_mean(aX,r)
+        print(Y1)
         err.append(distances.chordal_distance(Y0,Y1,medn))
         cauch = err[i-1]-err[i]
         i += 1
