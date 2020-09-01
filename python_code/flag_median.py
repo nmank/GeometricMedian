@@ -38,7 +38,6 @@ def flag_median(X, eps, r, init = 'random',  s_vals = False):
         aX.append(al[j]*X[j])
     alph.append(al)
     Y1 = flag_mean.flag_mean(aX,r)
-    print(Y1)
     err.append(distances.chordal_distance(Y0,Y1,medn))
     i += 1
     err.append(1)
@@ -52,12 +51,10 @@ def flag_median(X, eps, r, init = 'random',  s_vals = False):
         alph.append(al)
         Y0 = Y1
         Y1 = flag_mean.flag_mean(aX,r)
-        print(Y1)
         err.append(distances.chordal_distance(Y0,Y1,medn))
         cauch = err[i-1]-err[i]
         i += 1
 
-    print(i)
 
     if cauch < 0:
         Y1 = Y0

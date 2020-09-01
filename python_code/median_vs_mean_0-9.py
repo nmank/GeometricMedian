@@ -76,7 +76,7 @@ plt.show()
 #have to tweak around a bit with the plot to line up centers
 fig, axs = plt.subplots(2, 5)
 for kk in range(5):
-        axs[0, kk].imshow(np.reshape(centers_median[3][:,kk],(28,28)))
+        axs[0, kk].imshow(np.reshape(centers_median[0][:,kk],(28,28)))
         axs[1, kk].imshow(np.reshape(centers_mean[1][:,kk],(28,28)))
 
 #label the rows:
