@@ -156,4 +156,14 @@ plt.savefig('plot2.png')
 
 
 
+##############################################
+
+#load data and do mds
+pairwise_dist = distances.chordal_distance(data_list, data_list, False)
+data_transformed = distances.mds(pairwise_dist)
+plt.scatter(data_transformed[0,:],data_transformed[1,:])
+
+
+
+
 

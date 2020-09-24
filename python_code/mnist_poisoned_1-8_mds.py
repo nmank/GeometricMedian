@@ -5,6 +5,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 from sklearn.manifold import mds
 from sklearn.decomposition import PCA
+import distances
 
 
 def load_data(k = 5, ss_big = 500, digits = [0,1,2,3,4,5,6,7,8,9], st = 'train'):
@@ -29,27 +30,42 @@ data = data0 + data1
 
 medians = []
 means = []
-for i in range(10):
+for i in range(20):
     #load the data  
-    medians.append(flag_median.flag_median(data[:100+ 10*i],.000001,k))
-    means.append(flag_mean.flag_mean(data[:101 + 10*i]))
+    medians.append(flag_median.flag_median(data[:100+ 5*i],.000001,k))
+    means.append(flag_mean.flag_mean(data[:100 + 5*i]))
 
-data_1comp = np.vstack([d[:,0] for d in data])
-plot_data = np.vstack( [data_1comp, np.vstack([md[:,0] for md in medians]), np.vstack([mn[:,0] for mn in means])] )
+#plot first column
+# data_1comp = np.vstack([d[:,0] for d in data])
+# plot_data = np.vstack( [data_1comp, np.vstack([md[:,0] for md in medians]), np.vstack([mn[:,0] for mn in means])] )
 
-for i in range(10):
-    embedding = mds.MDS(n_components=2) 
-    data_transformed = embedding.fit_transform(plot_data)
-    # embedding = PCA(n_components=2) 
-    # embedding.fit(plot_data.T).components_.T
-    # data_transformed = embedding.transform(data)
+#plot all data
+plot_data = data + medians + means
+
+
+#Using sklearn mds
+# embedding = mds.MDS(n_components=2) 
+# data_transformed = embedding.fit_transform(plot_data)
+
+#Using sklearn PCA
+# embedding = PCA(n_components=2) 
+# data_transformed = embedding.fit_transform(plot_data)
+
+#Using distances.mds
+pairwise_dist = distances.chordal_distance(plot_data, plot_data, False)
+data_transformed = distances.mds(pairwise_dist)
+
+for i in range(19):
     plt.scatter(data_transformed[:100,0], data_transformed[:100,1], label = '1')
-    plt.scatter(data_transformed[100:100 + 10*i+1,0], data_transformed[100: 100 + 10*i+1,1], label = '8')
-    plt.scatter(data_transformed[191 + i,0], data_transformed[191 + i,1], marker = 'o', c = 'r', label = 'median')
-    plt.scatter(data_transformed[200 + i,0], data_transformed[200 + i,1], marker = 'o', c= 'k', label = 'mean')
+    plt.scatter(data_transformed[100:100 + 5*i,0], data_transformed[100: 100 + 5*i,1], label = '8')
+    plt.scatter(data_transformed[190 + i,0], data_transformed[190 + i,1], marker = 'o', c = 'r', label = 'median')
+    plt.scatter(data_transformed[210 + i,0], data_transformed[210 + i,1], marker = 'o', c= 'k', label = 'mean')
     plt.legend()
+    plt.xlim(-1, 1)
+    plt.ylim(-1, 1)
     plt.savefig('mds_poison_1-8_'+str(i)+'.png')
     plt.close()
+
 
 # fig, axs = plt.subplots(2, 10)
 # for kk in range(10):
