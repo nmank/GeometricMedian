@@ -20,7 +20,7 @@ def load_data(k = 5, ss_big = 500, digits = [0,1,2,3,4,5,6,7,8,9], st = 'train')
 
 ss_big = 500
 #gr(k,n), k<n and k must divide ss_big
-k=1
+k=5
 #out_k is number of singular vectors (space for the median or the mean)
 out_k = 5
 #load the data

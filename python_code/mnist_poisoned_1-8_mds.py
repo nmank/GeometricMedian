@@ -66,7 +66,7 @@ for i in range(9):
     plt.legend()
     plt.xlim(-1, 1)
     plt.ylim(-1, 1)
-    plt.savefig('1mds_poison_1-8_'+str(i)+'.png')
+    plt.savefig('mds_poison_1-8_'+str(i)+'.png')
     plt.close()
 
 
