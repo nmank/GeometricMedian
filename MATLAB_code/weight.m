@@ -1,6 +1,7 @@
 function [alpha,X] = weight(x,Y0,opt_type)
     p = length(x);
-    X = zeros(3,p);
+    [n,s] = size(x{1});
+    X = zeros(n,p);
     alpha = [];
     if opt_type == 'chord'
         for i=1:p

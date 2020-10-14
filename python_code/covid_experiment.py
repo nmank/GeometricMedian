@@ -1,6 +1,6 @@
 import numpy as np
-# import sys
-# sys.path.append('./covid-chestxrray-dataset/images')
+#import sys
+#sys.path.append('../data/covid-chestxrray-dataset/images')
 import gr_lbg
 import matplotlib
 from matplotlib import pyplot as plt
@@ -104,11 +104,13 @@ for l in labels_raw:
 
 data_covid = []
 for idx in covid_idx:
-    data_covid.append(np.linalg.qr(data_raw[idx])[0][:,:k])
+    data_vec = data_raw[idx].reshape(-1,1)
+    data_covid.append(data_vec/np.linalg.norm(data_vec))
 
 data_healthy = []
 for idx in healthy_idx:
-    data_healthy.append(np.linalg.qr(data_raw[idx])[0][:,:k])
+    data_vec = data_raw[idx].reshape(-1,1)
+    data_covid.append(data_vec/np.linalg.norm(data_vec))
 
 data = data_healthy + data_covid
 

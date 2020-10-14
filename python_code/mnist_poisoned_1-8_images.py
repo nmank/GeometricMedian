@@ -20,7 +20,7 @@ def load_data(k = 5, ss_big = 500, digits = [0,1,2,3,4,5,6,7,8,9], st = 'train')
 
 ss_big = 500
 #gr(k,n), k<n and k must divide ss_big
-k=5
+k=1
 #out_k is number of singular vectors (space for the median or the mean)
 out_k = 5
 #load the data
@@ -32,8 +32,8 @@ medians = []
 means = []
 for i in range(20):
     #load the data  
-    medians.append(flag_median.flag_median(data[:100+ 5*i],.000001,k))
-    means.append(flag_mean.flag_mean(data[:100 + 5*i]))
+    medians.append(flag_median.flag_median(data[:100+ 5*i],.000001,out_k))
+    means.append(flag_mean.flag_mean(data[:100 + 5*i], r= out_k))
 
 #plot first column
 # data_1comp = np.vstack([d[:,0] for d in data])
@@ -44,8 +44,8 @@ plot_data = data + medians + means
 
 
 for i in range(19):
-    fig, axs = plt.subplots(2, 5)
-    for j in range(5):
+    fig, axs = plt.subplots(2, out_k)
+    for j in range(out_k):
         med_reshape = np.reshape(medians[i][:,j],(28,28))
         if med_reshape[0,0] < 0:
             axs[0, j].imshow(med_reshape)

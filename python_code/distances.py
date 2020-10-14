@@ -42,6 +42,7 @@ def chordal_distance(X, Y, mdn):
         for i in range(m):
             for j in range(n):
                 if type(X[i]) == list:
+                    print('ERROR')
                     print(X[i])
                     distance[i,j] = 0
                 else:
@@ -102,5 +103,8 @@ def mds(D, eigplot=False):
         plt.ylabel('Value')
         plt.show()
     idx = np.nonzero(eigs > 0)[0]
+    #do we need to take the suqare root?
     embedding = np.dot(V.real[:, indx[idx]], np.diag(eigs[idx]**.5))
     return embedding
+
+

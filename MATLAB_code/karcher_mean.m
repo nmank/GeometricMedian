@@ -29,7 +29,7 @@ end
 Y0 = zeros(n,k);
 
 if isequal(init,'random')
-    y = rand(3,1); %random initialization
+    y = rand(n,1); %random initialization
     Y = y/norm(y);
 else
     Y = x{1}; %initialize at a datapoint
@@ -58,10 +58,10 @@ while norm(tY) >= epsilon
     tangents = [];
     for i=1:p
 
-        [V,U,Z,C,S] = gsvd(Y'*x{i},(eye(3) - Y*Y')*x{i});
+        [V,U,Z,C,S] = gsvd(Y'*x{i},(eye(n) - Y*Y')*x{i});
 
-        Theta = real(diag(acos(diag(C))));
-
+        Theta = diag(acos(diag(C)));
+        
         %fix this
         tangents(:,i) = U(:,1:k)*Theta*V';
         %for a sphere = calc_dist(x{i},Y,opt_type)*(x{i} - x{i}'*Y*Y)/norm(x{i} - x{i}'*Y*Y);
@@ -77,13 +77,14 @@ while norm(tY) >= epsilon
     er = calc_error(x,Y,p,opt_type);
     ii = ii+ 1;
     err(ii) = er;
-    if err(ii) > err(ii-1)
-        Y = Y0;
-        err(ii)= err(ii-1);
-        y(:,ii) = Y;
-        break
-    end
+%     if err(ii) > err(ii-1)
+%         Y = Y0;
+%         err(ii)= err(ii-1);
+%         y(:,ii) = Y;
+%         break
+%     end
     y(:,ii) = Y;
+
 end
 
 mean_point = Y;

@@ -25,7 +25,11 @@ for i=1:p
     %X(:,1+k*(i-1):k*i) = Q(:,1:k);
 end
 
-Y = [0;0;1];
+if n == 3
+    Y = [0;0;1];
+else
+    Y = [0;1];
+end
 
 ii = 1;
 err = [];
@@ -37,9 +41,9 @@ y(:,ii) = Y;
 y = [];
 y(:,1) = Y;
 for ii = 1:num_it
-    Y = y(:,1) + (2*rand(3,1)-1);
+    Y = y(:,1) + (2*rand(n,1)-1);
     Y = Y/norm(Y);
-    Y(3) = abs(Y(3));
+    Y(n) = abs(Y(n));
     er = calc_error(x,Y,p,opt_type);
     ii = ii+ 1;
     err(ii) = er;

@@ -25,11 +25,10 @@ for i=1:p
     %X(:,1+k*(i-1):k*i) = Q(:,1:k);
 end
 
-
 Y0 = zeros(n,k);
 
 if isequal(init,'random')
-    y = rand(3,1); %random initialization
+    y = rand(n,1); %random initialization
     Y = y/norm(y);
 else
     [Yall,S,V] = svd(X);
@@ -37,7 +36,6 @@ else
     %perturb
     %Y = Yall(:,1:k) + rand();
     Y = Y/norm(Y);
-    disp(Y)
 
 end
 init_pt = Y;
@@ -54,6 +52,7 @@ err = [];
 weights = [];
 y = [];
 y(:,ii) = Y;
+
 er = calc_error(x,Y,p,opt_type);
 err(ii) = er;
 weights = [];
@@ -63,6 +62,7 @@ while sqrt(k - trace((Y0'*Y)*(Y0'*Y)')) >= epsilon
     Y0 = Y;    
     [alpha,X] = weight(x,Y0,opt_type);
     weights(ii,:) = alpha;
+
     
     [Yall,S,V] = svd(X);
     Y = Yall(:,1);
@@ -76,7 +76,6 @@ while sqrt(k - trace((Y0'*Y)*(Y0'*Y)')) >= epsilon
         break
     end
     y(:,ii) = Y;
-    disp(Y)
 end
 
 
@@ -84,5 +83,3 @@ median_point = Y;
 
 end
 
-
-%imshow(reshape(10*median_point, 28,28),'InitialMagnification', 3200)

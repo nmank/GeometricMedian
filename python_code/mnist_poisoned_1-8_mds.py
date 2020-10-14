@@ -20,9 +20,9 @@ def load_data(k = 5, ss_big = 500, digits = [0,1,2,3,4,5,6,7,8,9], st = 'train')
 
 ss_big = 500
 #gr(k,n), k<n and k must divide ss_big
-k=5
+k=1
 #out_k is number of singular vectors (space for the median or the mean)
-out_k = 5
+out_k = 1
 #load the data
 [data0,labels_before0] = load_data(k, ss_big, digits = [1])
 [data1,labels_before1] = load_data(k, 50*9+1, digits = [8])
@@ -39,8 +39,9 @@ for i in range(20):
 # data_1comp = np.vstack([d[:,0] for d in data])
 # plot_data = np.vstack( [data_1comp, np.vstack([md[:,0] for md in medians]), np.vstack([mn[:,0] for mn in means])] )
 
+
 #plot all data
-plot_data = data + medians + means
+
 
 
 #Using sklearn mds
@@ -52,18 +53,20 @@ plot_data = data + medians + means
 # data_transformed = embedding.fit_transform(plot_data)
 
 #Using distances.mds
-pairwise_dist = distances.chordal_distance(plot_data, plot_data, False)
-data_transformed = distances.mds(pairwise_dist)
 
-for i in range(19):
+
+for i in range(9):
+    plot_data = data[:100 + 5*i] + [medians[i]] + [means[i]]
+    pairwise_dist = distances.chordal_distance(plot_data, plot_data, True)
+    data_transformed = distances.mds(pairwise_dist)
     plt.scatter(data_transformed[:100,0], data_transformed[:100,1], label = '1')
     plt.scatter(data_transformed[100:100 + 5*i,0], data_transformed[100: 100 + 5*i,1], label = '8')
-    plt.scatter(data_transformed[190 + i,0], data_transformed[190 + i,1], marker = 'o', c = 'r', label = 'median')
-    plt.scatter(data_transformed[210 + i,0], data_transformed[210 + i,1], marker = 'o', c= 'k', label = 'mean')
+    plt.scatter(data_transformed[-2,0], data_transformed[-2,1], marker = 'o', c = 'r', label = 'median')
+    plt.scatter(data_transformed[-1,0], data_transformed[-1,1], marker = 'o', c= 'k', label = 'mean')
     plt.legend()
     plt.xlim(-1, 1)
     plt.ylim(-1, 1)
-    plt.savefig('mds_poison_1-8_'+str(i)+'.png')
+    plt.savefig('1mds_poison_1-8_'+str(i)+'.png')
     plt.close()
 
 

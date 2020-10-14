@@ -5,14 +5,14 @@ angle = false;
 %angle = 2*pi/9; %angle for the circle from the origin in the direction of the z axis
 reg = true; %regular spacing
 frame = 1; %set this to 6 for point frame data
-num_samples = 5000
+num_samples = 1000
 
 %choose the distance in the optimization problem
 %chord = chordal
 %chors = chordal squared
 %geodi = geodesic
 %geods = geodesic squared
-opt_type = 'geodi';
+opt_type = 'chord';
 
 epsilon = .000001; %convergence criteria (squared sine of angles between consecutive iterations)
 init = 'random'; %algorithm initialization (start at flag mean if not 'random')
@@ -87,5 +87,7 @@ for ii=1:num_samples
     end
 end
 
+legend('Data','Median','Mean')
+title('Chordal Distance')
 
     
